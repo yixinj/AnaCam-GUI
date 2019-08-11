@@ -1,5 +1,10 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QInputDialog, QLineEdit, QFileDialog
-from PyQt5 import uic, QtWidgets
+import sys
+
+from PyQt5 import uic
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
+                             QLineEdit, QMainWindow, QWidget, QGraphicsView)
+
 from anacam import *
 
 INPUT_PATH = "./input/"
@@ -12,23 +17,27 @@ class Ui(QMainWindow):
 
         self.btnUpload.clicked.connect(self.upload_image)
         self.btnClear.clicked.connect(self.clear_image)
+        self.btnAnalyze.clicked.connect(self.analyze_image)
         self.show()
 
     def upload_image(self):
         path = QFileDialog.getOpenFileName(self, 'Upload image', './',
                                            "Image files (*.jpg)")[0]
         if path:
-            # TODO: set imageView graphic to the uploaded image
-            pass
+            # TODO: resize image
+            pixmap = QPixmap(path)
+            self.mainImage.setPixmap(pixmap)
 
     def clear_image(self):
         # TODO: clear imageView
+        
         pass
 
     # TODO: drag and drop functionality for imageView
-    
+
     def analyze_image(self):
-        hue = get_hue(path, spots=3, threshold=50)
+        # TODO: fix path, below
+        hue = get_hue("", spots=3, threshold=50)
 
 
 app = QApplication(sys.argv)
