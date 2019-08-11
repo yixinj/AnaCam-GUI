@@ -17,7 +17,7 @@ def get_hue(path, spots=3, threshold=50):
         threshold {int} -- Minimum threshold (default: {50})
 
     Returns:
-        list<int> -- List of hue values
+        list<int> -- List of ([RGB], hue) tuples
     """
     # Open and resize (note that it is BGR)
     img = cv.imread(path)
@@ -45,13 +45,12 @@ def get_hue(path, spots=3, threshold=50):
     # Return array of HSV values
     res = []
     for i in range(spots):
-        rgb = cv.mean(img_rgb, mask=masks[i])
-        print(i, rgb)
+        rgb = cv.mean(img_rgb, mask=masks[i])  # RGB mean of each spot
         rgb_scaled = np.divide(rgb, 255)
         hsv = colorsys.rgb_to_hsv(*rgb_scaled[0:3])
-        res.append(hsv[0])
+        res.append((rgb[0:3], hsv[0]))
 
-    return res  # Returns array of HSV values
+    return res  # Returns array of ([RGB], hue)
 
 
 def tenda(x, d_h_max, c_50):
