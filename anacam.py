@@ -6,8 +6,8 @@ import colorsys
 from scipy import optimize
 
 
-def get_hue(path, spots=3, threshold=50):
-    """Gets the hue of an image (jpg)
+def analyze(path, spots=3, threshold=50):
+    """Gets the mean RGB and hue of contours in device (jpg)
 
     Arguments:
         path {str} -- Path to the image
