@@ -44,6 +44,9 @@
            <height>400</height>
           </size>
          </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -77,6 +80,9 @@
          </property>
          <property name="text">
           <string>Upload</string>
+         </property>
+         <property name="autoDefault">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

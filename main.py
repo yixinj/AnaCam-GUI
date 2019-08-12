@@ -2,8 +2,9 @@ import sys
 
 import numpy as np
 from PyQt5 import QtCore, uic
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, qApp
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow, qApp,
+                             QDialog)
 
 from anacam import analyze
 
@@ -66,6 +67,7 @@ class MainWindow(QMainWindow):
 
     # TODO: drag and drop functionality for imageView
 
+    # TODO: make a new window for this
     def analyze_image(self):
         if self.pixmap:
             # Set parameters based on lineEdit values
@@ -102,7 +104,38 @@ class MainWindow(QMainWindow):
                                             self.mainImage.height(),
                                             QtCore.Qt.KeepAspectRatio,
                                             QtCore.Qt.SmoothTransformation)
-            self.mainImage.setPixmap(pixmap_resized)
+            # self.mainImage.setPixmap(pixmap_resized)
+            self.analysisDialog = AnalysisDialog(pixmap_resized)
+
+
+class AnalysisDialog(QDialog):
+    def __init__(self, pixmap):
+        super(AnalysisDialog, self).__init__()
+        self.pixmap = pixmap
+        self.init_UI()
+
+    def init_UI(self):
+        uic.loadUi('analysis.ui', self)
+        self.setWindowTitle('Analysis | AnaCam Desktop 1.0')
+        self.resize(1200, 800)
+        pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
+                                            self.mainImage.height(),
+                                            QtCore.Qt.KeepAspectRatio,
+                                            QtCore.Qt.SmoothTransformation)
+        self.mainImage.setPixmap(pixmap_resized)
+        self.show()
+
+    # def resizeEvent(self, event):
+    #     self.resized.emit()
+    #     return super(AnalysisDialog, self).resizeEvent(event)
+
+    # def resize_image(self):
+    #     if self.pixmap:
+    #         pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
+    #                                             self.mainImage.height(),
+    #                                             QtCore.Qt.KeepAspectRatio,
+    #                                             QtCore.Qt.SmoothTransformation)
+    #         self.mainImage.setPixmap(pixmap_resized)
 
 
 if __name__ == '__main__':
