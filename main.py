@@ -2,7 +2,7 @@ import sys
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
-                             QLineEdit, QMainWindow, QWidget, QGraphicsView)
+                             QLineEdit, QMainWindow, QWidget, QGraphicsView, qApp)
 
 from anacam import *
 
@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi('mainwindow.ui', self)
+        self.path = None
 
         # Buttons
         self.btnUpload.clicked.connect(self.upload_image)
@@ -24,16 +25,18 @@ class MainWindow(QMainWindow):
         self.actionUpload.triggered.connect(self.upload_image)
         self.actionClear.triggered.connect(self.clear_image)
         self.actionAnalyze.triggered.connect(self.analyze_image)
+        self.actionExit.triggered.connect(qApp.quit)
 
         self.resized.connect(self.resize_image)
         self.show()
 
     def upload_image(self):
-        path = QFileDialog.getOpenFileName(self, 'Upload image', './',
-                                           "Image files (*.jpg)")[0]
-        if path:
-            self.mainImage.setScaledContents(True);
-            pixmap = QPixmap(path)
+        self.path = QFileDialog.getOpenFileName(self, 'Upload image',
+                                                INPUT_PATH,
+                                                "Image files (*.jpg)")[0]
+        if self.path:
+            self.mainImage.setScaledContents(True)
+            pixmap = QPixmap(self.path)
             pixmap_resized = pixmap.scaled(self.mainImage.width(),
                                            self.mainImage.height(),
                                            QtCore.Qt.KeepAspectRatio,
@@ -61,8 +64,8 @@ class MainWindow(QMainWindow):
     # TODO: drag and drop functionality for imageView
 
     def analyze_image(self):
-        # TODO: fix path, below
-        hue = get_hue("", spots=3, threshold=50)
+        if self.path:
+            hue = analyze(self.path, spots=3, threshold=50)
 
 
 if __name__ == '__main__':

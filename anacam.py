@@ -5,7 +5,7 @@ import pandas as pd
 import colorsys
 from scipy import optimize
 
-
+# FIXME: too many values to unpack?
 def analyze(path, spots=3, threshold=50):
     """Gets the mean RGB and hue of contours in device (jpg)
 
