@@ -1,5 +1,4 @@
 import cv2 as cv
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import colorsys
@@ -55,13 +54,13 @@ def analyze(path, spots=3, threshold=50):
 
 def tenda(x, d_h_max, c_50):
     """Calculates theoretical hue using Tenda's equation, without the h_0
-    
+
     Arguments:
         x {number} -- hue
         d_h_max {number} -- constant
         c_50 {number} -- constant
         h_0 {number} -- constant; obtained from actual data
-    
+
     Returns:
         {number} -- Theoretical hue
     """
@@ -70,23 +69,23 @@ def tenda(x, d_h_max, c_50):
 
 def fit_curve(data, params):
     """Returns a tuple of optimized values of d_h_max and c_50
-    
+
     Arguments:
         data {list} -- list of lists that stores sample data for calibration
-    
+
     Returns:
         tuple -- Optimal tuple of (d_h_max, c_50)
     """
 
-    ###### Import csv to df ######
+    # Import csv to df ######
     df = pd.DataFrame(data)
     df.columns = ['x', 'h']
-    d_h_max = params[0]
-    c_50 = params[1]
+    # d_h_max = params[0]
+    # c_50 = params[1]
 
-    ###### Initial values ######
+    # Initial values ######
 
-    ###### Optimize theoretical curve (fit curve) ######
+    # Optimize theoretical curve (fit curve) ######
     params, params_covariance = optimize.curve_fit(tenda,
                                                    df.x.tolist(),
                                                    df.h.tolist(),

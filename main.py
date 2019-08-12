@@ -1,11 +1,8 @@
-import sys
 from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
-                             QLineEdit, QMainWindow, QWidget, QGraphicsView,
-                             qApp)
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow, qApp)
 
-from anacam import *
+from anacam import analyze
 
 INPUT_PATH = "./input/"
 
@@ -62,11 +59,13 @@ class MainWindow(QMainWindow):
     # TODO: drag and drop functionality for imageView
 
     def analyze_image(self):
-        if path:
-            hue = analyze(path, spots=3, threshold=50)
+        if self.pixmap:
+            hue = analyze("", spots=3, threshold=50)
+            print(hue)
 
 
 if __name__ == '__main__':
+    import sys
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
