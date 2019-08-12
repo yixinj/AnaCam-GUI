@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi('mainwindow.ui', self)
-        self.path = None
+        self.pixmap = None
 
         # Buttons
         self.btnUpload.clicked.connect(self.upload_image)
@@ -31,13 +31,13 @@ class MainWindow(QMainWindow):
         self.show()
 
     def upload_image(self):
-        self.path = QFileDialog.getOpenFileName(self, 'Upload image',
+        path = QFileDialog.getOpenFileName(self, 'Upload image',
                                                 INPUT_PATH,
                                                 "Image files (*.jpg)")[0]
-        if self.path:
+        if path:
             self.mainImage.setScaledContents(True)
-            pixmap = QPixmap(self.path)
-            pixmap_resized = pixmap.scaled(self.mainImage.width(),
+            self.pixmap = QPixmap(path)
+            pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
                                            self.mainImage.height(),
                                            QtCore.Qt.KeepAspectRatio,
                                            QtCore.Qt.FastTransformation)
@@ -53,9 +53,8 @@ class MainWindow(QMainWindow):
 
     # FIXME: stop resize from messing up the image
     def resize_image(self):
-        pixmap = self.mainImage.pixmap()
-        if pixmap:
-            pixmap_resized = pixmap.scaled(self.mainImage.width(),
+        if self.pixmap:
+            pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
                                            self.mainImage.height(),
                                            QtCore.Qt.KeepAspectRatio,
                                            QtCore.Qt.SmoothTransformation)
@@ -64,8 +63,8 @@ class MainWindow(QMainWindow):
     # TODO: drag and drop functionality for imageView
 
     def analyze_image(self):
-        if self.path:
-            hue = analyze(self.path, spots=3, threshold=50)
+        if path:
+            hue = analyze(path, spots=3, threshold=50)
 
 
 if __name__ == '__main__':
