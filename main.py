@@ -16,22 +16,27 @@ class Ui(QMainWindow):
         uic.loadUi('mainwindow.ui', self)
 
         self.btnUpload.clicked.connect(self.upload_image)
+        self.actionUpload.triggered.connect(self.upload_image)
+
         self.btnClear.clicked.connect(self.clear_image)
+        self.actionClear.triggered.connect(self.clear_image)
+
         self.btnAnalyze.clicked.connect(self.analyze_image)
+        self.actionAnalyze.triggered.connect(self.analyze_image)
         self.show()
 
     def upload_image(self):
         path = QFileDialog.getOpenFileName(self, 'Upload image', './',
                                            "Image files (*.jpg)")[0]
         if path:
-            # TODO: resize image
             pixmap = QPixmap(path)
             self.mainImage.setPixmap(pixmap)
+            # TODO: resize image
+            self.mainImage.resize(self.mainImage.width(),
+                                  self.mainImage.height())
 
     def clear_image(self):
-        # TODO: clear imageView
-        
-        pass
+        self.mainImage.clear()
 
     # TODO: drag and drop functionality for imageView
 
