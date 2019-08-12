@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
     def init_UI(self):
         uic.loadUi('mainwindow.ui', self)
 
-        self.setWindowTitle('AnaCam Desktop 0.1')
+        self.setWindowTitle('AnaCam Desktop 1.0')
 
         # Buttons
         self.btnUpload.clicked.connect(self.upload_image)
