@@ -111,6 +111,6 @@ params = (d_h_max, c_50)
 
 params = fit_curve(data, params)
 
-# a = analyze("./input/sample.jpg")
-a = analyze(1)
+a = analyze("./input/sample.jpg")
+# a = analyze(1)
 print(a)

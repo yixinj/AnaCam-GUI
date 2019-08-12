@@ -1,6 +1,7 @@
-from PyQt5 import uic, QtCore
+import numpy as np
+from PyQt5 import QtCore, uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow, qApp)
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, qApp
 
 from anacam import analyze
 
@@ -66,7 +67,15 @@ class MainWindow(QMainWindow):
 
     def analyze_image(self):
         if self.pixmap:
-            hue = analyze("", spots=3, threshold=50)
+            # Convert pixmap to img
+            channels_count = 4
+            image = self.pixmap.toImage()
+            s = image.bits().asstring(self.pixmap.height * self.pixmap.width *
+                                      channels_count)
+            img = np.fromstring(s, dtype=np.uint8).reshape(
+                (self.pixmap.height, self.pixmap.width, channels_count))
+
+            hue = analyze(img, spots=3, threshold=50)
             print(hue)
 
 
