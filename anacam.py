@@ -20,11 +20,14 @@ def analyze(src, spots=3, threshold=50):
     """
     if type(src) is str:
         img = cv.imread(src)
+        if not img:
+            raise ValueError("path did not lead to an image")
     elif type(src) is np.ndarray:
         img = src
     else:
         raise TypeError("src was not a string or ndarray")
     # Finding contours in grayscale version
+    print(img)
     imgray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     ret, thresh = cv.threshold(imgray, int(threshold), 255,
                                type=0)  # Type is binary thresh
@@ -108,5 +111,6 @@ params = (d_h_max, c_50)
 
 params = fit_curve(data, params)
 
-a = analyze("./input/sample.jpg")
+# a = analyze("./input/sample.jpg")
+a = analyze(1)
 print(a)
