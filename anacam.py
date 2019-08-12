@@ -5,11 +5,11 @@ import colorsys
 from scipy import optimize
 
 
-def analyze(img, spots=3, threshold=50):
+def analyze(src, spots=3, threshold=50):
     """Gets the mean RGB and hue of contours in device (jpg)
 
     Arguments:
-        img {OpenCV image} -- Image to be analyzed
+        img {ndarray} -- Image to be analyzed
 
     Keyword Arguments:
         spots {int} -- Number of contours to be found (default: {3})
@@ -18,6 +18,12 @@ def analyze(img, spots=3, threshold=50):
     Returns:
         list<Object> -- List of (image, (RGB), hue) tuples
     """
+    if type(src) is str:
+        img = cv.imread(src)
+    elif type(src) is np.ndarray:
+        img = src
+    else:
+        raise TypeError("src was not a string or ndarray")
     # Finding contours in grayscale version
     imgray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     ret, thresh = cv.threshold(imgray, int(threshold), 255,
@@ -47,14 +53,6 @@ def analyze(img, spots=3, threshold=50):
         res.append((rgb[0:3], hsv[0]))
 
     return res  # Returns array of ((RGB), hue)
-
-
-def analyze(path: str, spots=3, threshold=50):
-    """
-    Overrides analyze with path to image
-    """
-    img = cv.imread(path)
-    return analyze(img, spots, threshold)
 
 
 def tenda(x, d_h_max, c_50):
@@ -110,5 +108,5 @@ params = (d_h_max, c_50)
 
 params = fit_curve(data, params)
 
-a = analyze('./input/sample.jpg')
+a = analyze("./input/sample.jpg")
 print(a)
