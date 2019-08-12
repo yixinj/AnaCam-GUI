@@ -5,7 +5,7 @@ import colorsys
 from scipy import optimize
 
 
-def analyze(src, spots=3, threshold=50):
+def analyze(src, num_contours=3, threshold=50):
     """Gets the mean RGB and hue of contours in device (jpg)
 
     Arguments:
@@ -20,7 +20,7 @@ def analyze(src, spots=3, threshold=50):
     """
     if type(src) is str:
         img = cv.imread(src)
-        if not img:
+        if img is None:
             raise ValueError("path did not lead to an image")
     elif type(src) is np.ndarray:
         img = src
@@ -36,11 +36,11 @@ def analyze(src, spots=3, threshold=50):
 
     # Find largest three areas
     contours.sort(reverse=True, key=len)
-    selected_areas = contours[0:spots]
+    selected_areas = contours[0:num_contours]
 
     # Mask and draw
-    masks = [np.zeros(imgray.shape, np.uint8) for i in range(spots)]
-    for i in range(spots):
+    masks = [np.zeros(imgray.shape, np.uint8) for i in range(num_contours)]
+    for i in range(num_contours):
         cv.drawContours(masks[i], selected_areas[i:i + 1], -1, 255, -1)
     img_overlayed = img
     cv.drawContours(img_overlayed, selected_areas, -1, (0, 0, 255), 1)
@@ -49,7 +49,7 @@ def analyze(src, spots=3, threshold=50):
 
     # Return array of HSV values
     res = []
-    for i in range(spots):
+    for i in range(num_contours):
         rgb = cv.mean(img_rgb, mask=masks[i])  # RGB mean of each spot
         rgb_scaled = np.divide(rgb, 255)
         hsv = colorsys.rgb_to_hsv(*rgb_scaled[0:3])
@@ -102,15 +102,14 @@ def fit_curve(data, params):
 
 # TODO: add a method for reoptimizing
 
-data = [(0, 173.501), (10, 172.8135), (25, 175.1297505), (50, 173.7564841),
-        (100, 175.6190177), (250, 178.2062588), (500, 182.1548396),
-        (1000, 185.1032287), (5000, 187.5903869), (10000, 187.5659567)]
-d_h_max = 50
-c_50 = 25
-params = (d_h_max, c_50)
+# data = [(0, 173.501), (10, 172.8135), (25, 175.1297505), (50, 173.7564841),
+#         (100, 175.6190177), (250, 178.2062588), (500, 182.1548396),
+#         (1000, 185.1032287), (5000, 187.5903869), (10000, 187.5659567)]
+# d_h_max = 50
+# c_50 = 25
+# params = (d_h_max, c_50)
 
-params = fit_curve(data, params)
+# params = fit_curve(data, params)
 
-a = analyze("./input/sample.jpg")
+# a = analyze("./input/sample.jpg")
 # a = analyze(1)
-print(a)

@@ -129,9 +129,18 @@
         <widget class="QLineEdit" name="editContours">
          <property name="maximumSize">
           <size>
-           <width>75</width>
+           <width>40</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="inputMethodHints">
+          <set>Qt::ImhDigitsOnly</set>
+         </property>
+         <property name="text">
+          <string>3</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -152,9 +161,18 @@
         <widget class="QLineEdit" name="editThreshold">
          <property name="maximumSize">
           <size>
-           <width>75</width>
+           <width>40</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="inputMethodHints">
+          <set>Qt::ImhDigitsOnly</set>
+         </property>
+         <property name="text">
+          <string>50</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>

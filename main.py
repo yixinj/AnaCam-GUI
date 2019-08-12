@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from PyQt5 import QtCore, uic
 from PyQt5.QtGui import QPixmap
@@ -46,7 +48,6 @@ class MainWindow(QMainWindow):
                                                 QtCore.Qt.KeepAspectRatio,
                                                 QtCore.Qt.FastTransformation)
             self.mainImage.setPixmap(pixmap_resized)
-            # self.mainImage.setPixmap(pixmap)
 
     def clear_image(self):
         self.mainImage.clear()
@@ -70,17 +71,24 @@ class MainWindow(QMainWindow):
             # Convert pixmap to img
             channels_count = 4
             image = self.pixmap.toImage()
-            s = image.bits().asstring(self.pixmap.height * self.pixmap.width *
-                                      channels_count)
+            s = image.bits().asstring(self.pixmap.height() *
+                                      self.pixmap.width() * channels_count)
             img = np.fromstring(s, dtype=np.uint8).reshape(
-                (self.pixmap.height, self.pixmap.width, channels_count))
+                (self.pixmap.height(), self.pixmap.width(), channels_count))
 
-            hue = analyze(img, spots=3, threshold=50)
+            # Set parameters based on lineEdit values
+            num_contours = int(self.editContours.text())
+            if num_contours < 1:
+                num_contours = 1
+            threshold = int(self.editThreshold.text())
+            if threshold < 0:
+                threshold = 0
+
+            hue = analyze(img, num_contours=num_contours, threshold=threshold)
             print(hue)
 
 
 if __name__ == '__main__':
-    import sys
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
