@@ -100,12 +100,12 @@ class MainWindow(QMainWindow):
             qImg = QImage(res_img.data, width, height, bytesPerLine,
                           QImage.Format_RGB888).rgbSwapped()
             qPixmap = QPixmap.fromImage(qImg)
-            pixmap_resized = qPixmap.scaled(self.mainImage.width(),
-                                            self.mainImage.height(),
-                                            QtCore.Qt.KeepAspectRatio,
-                                            QtCore.Qt.SmoothTransformation)
+            # pixmap_resized = qPixmap.scaled(self.mainImage.width(),
+            #                                 self.mainImage.height(),
+            #                                 QtCore.Qt.KeepAspectRatio,
+            #                                 QtCore.Qt.SmoothTransformation)
             # self.mainImage.setPixmap(pixmap_resized)
-            self.analysisDialog = AnalysisDialog(pixmap_resized)
+            self.analysisDialog = AnalysisDialog(qPixmap)
 
 
 class AnalysisDialog(QDialog):
@@ -118,11 +118,11 @@ class AnalysisDialog(QDialog):
         uic.loadUi('analysis.ui', self)
         self.setWindowTitle('Analysis | AnaCam Desktop 1.0')
         self.resize(1200, 800)
-        pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
-                                            self.mainImage.height(),
-                                            QtCore.Qt.KeepAspectRatio,
-                                            QtCore.Qt.SmoothTransformation)
-        self.mainImage.setPixmap(pixmap_resized)
+        # pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
+        #                                     self.mainImage.height(),
+        #                                     QtCore.Qt.KeepAspectRatio,
+        #                                     QtCore.Qt.SmoothTransformation)
+        self.mainImage.setPixmap(self.pixmap)
         self.show()
 
     # def resizeEvent(self, event):
