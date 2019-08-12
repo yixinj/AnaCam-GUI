@@ -32,12 +32,14 @@ class MainWindow(QMainWindow):
         path = QFileDialog.getOpenFileName(self, 'Upload image', './',
                                            "Image files (*.jpg)")[0]
         if path:
+            self.mainImage.setScaledContents(True);
             pixmap = QPixmap(path)
             pixmap_resized = pixmap.scaled(self.mainImage.width(),
                                            self.mainImage.height(),
                                            QtCore.Qt.KeepAspectRatio,
                                            QtCore.Qt.FastTransformation)
             self.mainImage.setPixmap(pixmap_resized)
+            # self.mainImage.setPixmap(pixmap)
 
     def clear_image(self):
         self.mainImage.clear()
@@ -45,6 +47,16 @@ class MainWindow(QMainWindow):
     def resizeEvent(self, event):
         self.resized.emit()
         return super(MainWindow, self).resizeEvent(event)
+
+    # FIXME: stop resize from messing up the image
+    def resize_image(self):
+        pixmap = self.mainImage.pixmap()
+        if pixmap:
+            pixmap_resized = pixmap.scaled(self.mainImage.width(),
+                                           self.mainImage.height(),
+                                           QtCore.Qt.KeepAspectRatio,
+                                           QtCore.Qt.SmoothTransformation)
+            self.mainImage.setPixmap(pixmap_resized)
 
     # TODO: drag and drop functionality for imageView
 
