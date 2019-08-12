@@ -12,8 +12,13 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('mainwindow.ui', self)
         self.pixmap = None
+        self.init_UI()
+
+    def init_UI(self):
+        uic.loadUi('mainwindow.ui', self)
+
+        self.setWindowTitle('AnaCam Desktop 0.1')
 
         # Buttons
         self.btnUpload.clicked.connect(self.upload_image)
@@ -26,6 +31,7 @@ class MainWindow(QMainWindow):
         self.actionExit.triggered.connect(qApp.quit)
 
         self.resized.connect(self.resize_image)
+
         self.show()
 
     def upload_image(self):
