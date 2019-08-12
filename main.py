@@ -118,24 +118,8 @@ class AnalysisDialog(QDialog):
         uic.loadUi('analysis.ui', self)
         self.setWindowTitle('Analysis | AnaCam Desktop 1.0')
         self.resize(1200, 800)
-        # pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
-        #                                     self.mainImage.height(),
-        #                                     QtCore.Qt.KeepAspectRatio,
-        #                                     QtCore.Qt.SmoothTransformation)
         self.mainImage.setPixmap(self.pixmap)
         self.show()
-
-    # def resizeEvent(self, event):
-    #     self.resized.emit()
-    #     return super(AnalysisDialog, self).resizeEvent(event)
-
-    # def resize_image(self):
-    #     if self.pixmap:
-    #         pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
-    #                                             self.mainImage.height(),
-    #                                             QtCore.Qt.KeepAspectRatio,
-    #                                             QtCore.Qt.SmoothTransformation)
-    #         self.mainImage.setPixmap(pixmap_resized)
 
 
 if __name__ == '__main__':
