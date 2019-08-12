@@ -5,7 +5,7 @@ import pandas as pd
 import colorsys
 from scipy import optimize
 
-# FIXME: too many values to unpack?
+
 def analyze(path, spots=3, threshold=50):
     """Gets the mean RGB and hue of contours in device (jpg)
 
@@ -17,7 +17,7 @@ def analyze(path, spots=3, threshold=50):
         threshold {int} -- Minimum threshold (default: {50})
 
     Returns:
-        list<int> -- List of ([RGB], hue) tuples
+        list<Object> -- List of (image, (RGB), hue) tuples
     """
     # Open and resize (note that it is BGR)
     img = cv.imread(path)
@@ -50,7 +50,7 @@ def analyze(path, spots=3, threshold=50):
         hsv = colorsys.rgb_to_hsv(*rgb_scaled[0:3])
         res.append((rgb[0:3], hsv[0]))
 
-    return res  # Returns array of ([RGB], hue)
+    return res  # Returns array of ((RGB), hue)
 
 
 def tenda(x, d_h_max, c_50):
@@ -75,7 +75,7 @@ def fit_curve(data, params):
         data {list} -- list of lists that stores sample data for calibration
     
     Returns:
-        [type] -- [description]
+        tuple -- Optimal tuple of (d_h_max, c_50)
     """
 
     ###### Import csv to df ######
@@ -105,5 +105,6 @@ c_50 = 25
 params = (d_h_max, c_50)
 
 params = fit_curve(data, params)
-# res = tenda(x, d_h_max, c_50) + h_0
-# print(res)
+
+a = analyze('./input/sample.jpg')
+print(a)

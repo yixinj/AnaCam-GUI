@@ -2,7 +2,8 @@ import sys
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
-                             QLineEdit, QMainWindow, QWidget, QGraphicsView, qApp)
+                             QLineEdit, QMainWindow, QWidget, QGraphicsView,
+                             qApp)
 
 from anacam import *
 
@@ -31,16 +32,15 @@ class MainWindow(QMainWindow):
         self.show()
 
     def upload_image(self):
-        path = QFileDialog.getOpenFileName(self, 'Upload image',
-                                                INPUT_PATH,
-                                                "Image files (*.jpg)")[0]
+        path = QFileDialog.getOpenFileName(self, 'Upload image', INPUT_PATH,
+                                           "Image files (*.jpg)")[0]
         if path:
             self.mainImage.setScaledContents(True)
             self.pixmap = QPixmap(path)
             pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
-                                           self.mainImage.height(),
-                                           QtCore.Qt.KeepAspectRatio,
-                                           QtCore.Qt.FastTransformation)
+                                                self.mainImage.height(),
+                                                QtCore.Qt.KeepAspectRatio,
+                                                QtCore.Qt.FastTransformation)
             self.mainImage.setPixmap(pixmap_resized)
             # self.mainImage.setPixmap(pixmap)
 
@@ -51,13 +51,12 @@ class MainWindow(QMainWindow):
         self.resized.emit()
         return super(MainWindow, self).resizeEvent(event)
 
-    # FIXME: stop resize from messing up the image
     def resize_image(self):
         if self.pixmap:
             pixmap_resized = self.pixmap.scaled(self.mainImage.width(),
-                                           self.mainImage.height(),
-                                           QtCore.Qt.KeepAspectRatio,
-                                           QtCore.Qt.SmoothTransformation)
+                                                self.mainImage.height(),
+                                                QtCore.Qt.KeepAspectRatio,
+                                                QtCore.Qt.SmoothTransformation)
             self.mainImage.setPixmap(pixmap_resized)
 
     # TODO: drag and drop functionality for imageView
