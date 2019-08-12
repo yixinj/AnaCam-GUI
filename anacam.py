@@ -16,7 +16,7 @@ def analyze(src, num_contours=3, threshold=50):
         threshold {int} -- Minimum threshold (default: {50})
 
     Returns:
-        list<Object> -- List of (image, (RGB), hue) tuples
+        list<Object> -- [ndarray, (RGB), hue)*n]
     """
     if type(src) is str:
         img = cv.imread(src)
@@ -48,14 +48,14 @@ def analyze(src, num_contours=3, threshold=50):
     img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
 
     # Return array of HSV values
-    res = []
+    res = [img_overlayed]
     for i in range(num_contours):
         rgb = cv.mean(img_rgb, mask=masks[i])  # RGB mean of each spot
         rgb_scaled = np.divide(rgb, 255)
         hsv = colorsys.rgb_to_hsv(*rgb_scaled[0:3])
         res.append((rgb[0:3], hsv[0]))
 
-    return res  # Returns array of ((RGB), hue)
+    return res  # Returns: [ndarray, ((RGB), hue)*n]
 
 
 def tenda(x, d_h_max, c_50):

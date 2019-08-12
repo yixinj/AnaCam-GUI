@@ -2,7 +2,7 @@ import sys
 
 import numpy as np
 from PyQt5 import QtCore, uic
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, qApp
 
 from anacam import analyze
@@ -68,24 +68,41 @@ class MainWindow(QMainWindow):
 
     def analyze_image(self):
         if self.pixmap:
-            # Convert pixmap to img
+            # Set parameters based on lineEdit values
+            num_contours = int(self.editContours.text())
+            if num_contours < 1:
+                self.editContours.setText('1')
+                num_contours = 1
+            threshold = int(self.editThreshold.text())
+            if threshold < 0:
+                self.editThreshold.setText('0')
+                threshold = 0
+            qApp.processEvents()  # Update the GUI
+
+            # Convert pixmap to ndarray
             channels_count = 4
             image = self.pixmap.toImage()
             s = image.bits().asstring(self.pixmap.height() *
                                       self.pixmap.width() * channels_count)
-            img = np.fromstring(s, dtype=np.uint8).reshape(
+            img = np.frombuffer(s, dtype=np.uint8).reshape(
                 (self.pixmap.height(), self.pixmap.width(), channels_count))
 
-            # Set parameters based on lineEdit values
-            num_contours = int(self.editContours.text())
-            if num_contours < 1:
-                num_contours = 1
-            threshold = int(self.editThreshold.text())
-            if threshold < 0:
-                threshold = 0
+            # Analyze image
+            res = analyze(img, num_contours=num_contours, threshold=threshold)
 
-            hue = analyze(img, num_contours=num_contours, threshold=threshold)
-            print(hue)
+            # Convert analyzed image to QImage
+            res_img = res[0]
+            res_img = np.delete(res_img, 3, 2)
+            height, width, channel = res_img.shape
+            bytesPerLine = 3 * width
+            qImg = QImage(res_img.data, width, height, bytesPerLine,
+                          QImage.Format_RGB888).rgbSwapped()
+            qPixmap = QPixmap.fromImage(qImg)
+            pixmap_resized = qPixmap.scaled(self.mainImage.width(),
+                                            self.mainImage.height(),
+                                            QtCore.Qt.KeepAspectRatio,
+                                            QtCore.Qt.SmoothTransformation)
+            self.mainImage.setPixmap(pixmap_resized)
 
 
 if __name__ == '__main__':
