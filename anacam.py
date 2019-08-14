@@ -50,7 +50,7 @@ def analyze(src, num_contours=3, threshold=50):
         M = cv.moments(contours[i])
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
-        cv.putText(img_overlayed, str(i), (cX, cY), cv.FONT_HERSHEY_SIMPLEX,
+        cv.putText(img_overlayed, str(i+1), (cX, cY), cv.FONT_HERSHEY_SIMPLEX,
                    1, (0, 0, 255), 2)
 
     img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)

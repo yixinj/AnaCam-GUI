@@ -3,8 +3,14 @@ import sys
 import numpy as np
 from PyQt5 import QtCore, uic
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow, qApp,
-                             QDialog)
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QMainWindow,
+    qApp,
+    QDialog,
+    QTableWidgetItem,
+)
 
 from anacam import analyze
 
@@ -67,7 +73,6 @@ class MainWindow(QMainWindow):
 
     # TODO: drag and drop functionality for imageView
 
-    # TODO: make a new window for this
     def analyze_image(self):
         if self.pixmap:
             # Set parameters based on lineEdit values
@@ -106,6 +111,7 @@ class MainWindow(QMainWindow):
             #                                 QtCore.Qt.SmoothTransformation)
             # self.mainImage.setPixmap(pixmap_resized)
             self.analysisDialog = AnalysisDialog(qPixmap)
+            self.tableDialog = TableDialog(res[1:])
 
 
 class AnalysisDialog(QDialog):
@@ -119,6 +125,45 @@ class AnalysisDialog(QDialog):
         self.setWindowTitle('Analysis | AnaCam Desktop 1.0')
         self.resize(1200, 800)
         self.mainImage.setPixmap(self.pixmap)
+        self.show()
+
+
+class TableDialog(QDialog):
+    def __init__(self, values):
+        super(TableDialog, self).__init__()
+        self.values = values
+        self.init_UI()
+
+    def init_UI(self):
+        uic.loadUi('values.ui', self)
+        self.setWindowTitle('Values | AnaCam Desktop 1.0')
+        self.resize(600, 400)
+
+        # Set up table rows and columns
+        self.tableValues.setColumnCount(4)
+        self.tableValues.setRowCount(len(self.values))
+
+        headerHue = QTableWidgetItem('hue')
+        headerRed = QTableWidgetItem('red')
+        headerGreen = QTableWidgetItem('green')
+        headerBlue = QTableWidgetItem('blue')
+        self.tableValues.setHorizontalHeaderItem(0, headerHue)
+        self.tableValues.setHorizontalHeaderItem(1, headerRed)
+        self.tableValues.setHorizontalHeaderItem(2, headerGreen)
+        self.tableValues.setHorizontalHeaderItem(3, headerBlue)
+
+        # Set up table data
+        for num, values in enumerate(self.values):
+            rgb, hue = values
+            hue = QTableWidgetItem(str(hue * 360))
+            red = QTableWidgetItem(str(rgb[0]))
+            green = QTableWidgetItem(str(rgb[1]))
+            blue = QTableWidgetItem(str(rgb[2]))
+            self.tableValues.setItem(num, 0, hue)  # hue
+            self.tableValues.setItem(num, 1, red)  # red
+            self.tableValues.setItem(num, 2, green)  # green
+            self.tableValues.setItem(num, 3, blue)  # blue
+
         self.show()
 
 
